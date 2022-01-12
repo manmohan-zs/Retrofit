@@ -55,5 +55,17 @@ class MainActivity : AppCompatActivity() {
                 Log.i("MY_TAG_PATH", albumItem.title)
             }
         })
+        uploadAlbum(retService)
+    }
+
+    private fun uploadAlbum(retService: AlbumService) {
+        val album = AlbumsItem(0, "My title", 3)
+        val postResponse: LiveData<Response<AlbumsItem>> = liveData {
+            val response = retService.uploadAlbum(album)
+            emit(response)
+        }
+        postResponse.observe(this, Observer {
+
+        })
     }
 }
