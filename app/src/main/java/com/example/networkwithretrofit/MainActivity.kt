@@ -28,5 +28,32 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+        val responseLiveDataForQuery: LiveData<Response<Albums>> = liveData {
+            val listOfAlbums = retService.getSortedAlbums(3)
+            emit(listOfAlbums)
+        }
+        //QueryResponse
+        responseLiveDataForQuery.observe(this, Observer {
+            val albumsList: MutableListIterator<AlbumsItem>? = it.body()?.listIterator()
+            if (albumsList != null) {
+                while (albumsList.hasNext()) {
+                    val albumsItem: AlbumsItem = albumsList.next()
+                    Log.i("MY_TAG_Query", albumsItem.title)
+                }
+            }
+        })
+
+
+        val responseLiveDataForPath: LiveData<Response<AlbumsItem>> = liveData {
+            val albumItem = retService.getAlbum(3)
+            emit(albumItem)
+        }
+        responseLiveDataForPath.observe(this, Observer {
+            val albumItem = it.body()
+            albumItem?.let { it1 ->
+                Log.i("MY_TAG_PATH", albumItem.title)
+            }
+        })
     }
 }
